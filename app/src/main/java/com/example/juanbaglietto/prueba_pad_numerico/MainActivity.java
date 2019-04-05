@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         mTimeOut= new Contador(1000,1000);
         mTimeOut.start();
 
-        TextSizeDown = (float) mNumerIn.getTextSize();
-        TextSizeUp = (float) mNumerIn.getTextSize() +5;
+        TextSizeDown = (float) mNumerIn.getTextSize();      // cargo el tamanio mas chico de letra con el valor definido en el xml
+        TextSizeUp = TextSizeDown +5;                       // defino el tamanio mas grande de letra a partir del tamnio definido en el xml
 
         /*Funcion que se llama cuando se detecta un long press en el texEdit mNumerIn */
         mNumerIn.setOnLongClickListener(new View.OnLongClickListener() {
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
 
 /*Funcion que se llama cuando se apreta sobre el boton Ok o FIN del teclado */
         mNumerIn.setOnEditorActionListener(new EditText.OnEditorActionListener() {
@@ -79,8 +80,16 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);    //esconde el taclado
+
+
+                    /*Una vez que el usuario termino de editar el campo cargo el nuevo valor ingresado en la varible que se actualiza cada 1 segundo
+                    * Despues actulizo el valor que se muestra en el textedit mNumerOrginal con el nuevo valor ingresado  */
                     cont=mNumerSave;
-                    mNumerIn.setTextSize(TypedValue.COMPLEX_UNIT_SP,TextSizeDown);
+                    mNumerOrginal.setText(""+cont);
+
+
+                    mNumerIn.setTextSize(TypedValue.COMPLEX_UNIT_SP,TextSizeDown); // esta funcion reduce el tamanio de la letra al valor inicial del xml
+
                     return true;
                 }
                 return false;
@@ -88,49 +97,26 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+            /* La clese TextWatcher perminte reconocer las acciones que se producen cuando el usuario esta editando un textEdit   */
         mNumerIn.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                // TODO Auto-generated method stub
-
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                // TODO Auto-generated method stub
-                mNumerIn.setTextSize(TypedValue.COMPLEX_UNIT_SP,TextSizeUp);
+                /*Se entra aca cuando el usurio empieza a ingresar un nuevo numero pero antes que este se muestre en el textEdit*/
+
+                mNumerIn.setTextSize(TypedValue.COMPLEX_UNIT_SP,TextSizeUp);  // Funcion que cambia el tamanio de los numeros
 
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-                // TODO Auto-generated method stub
-            }
+            public void afterTextChanged(Editable s) {}
         });
-
-
-       /* tt = new TextWatcher(){
-            public void afterTextChanged(Editable s){
-                //mNumerIn.setSelection(s.length());
-
-            }
-            public void beforeTextChanged(CharSequence s,int start,int count, int after){
-
-
-            }
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                float size = mNumerIn.getTextSize() + 10;
-                mNumerIn.setTextSize(TypedValue.COMPLEX_UNIT_SP,size);
-
-            }
-        };*/
     }
 
+     /*Clase que utilizo para generar la interucion del timer cada 1 segundo */
     public class Contador extends CountDownTimer {
 
         public Contador(long millisInFuture, long countDownInterval) {
@@ -151,9 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTick(long millisUntilFinished) {
-
-
-
 
         }
 
